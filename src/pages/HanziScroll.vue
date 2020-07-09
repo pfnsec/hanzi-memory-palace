@@ -3,9 +3,14 @@
     <q-page flex
       @keydown.left="prev"
       @keydown.right="next"
+      v-touch:swipe.right="prev"
+      v-touch:swipe.left="next"
     >
 
-      <q-dialog v-model="showingDef" style='min-width: 33%'>
+      <q-dialog v-model="showingDef" style='min-width: 33%'
+        @keydown.left="prev"
+        @keydown.right="next"
+      >
         <q-card style="width: 55vw">
           <q-card-section>
             <div class="row justify-center">
@@ -26,16 +31,45 @@
             </ul>
           </q-card-section>
 
-          <q-card-actions align="right">
-            <q-btn flat label="OK" color="primary" v-close-popup />
-          </q-card-actions>
+          <div class="row no-wrap justify-between" style="padding: 5%">
+
+            <q-card-actions align="left">
+              <q-btn v-if="starred(currentDef['word'])" flat icon="star"  color="primary" @click="unstar(currentDef['word'])" />
+
+              <q-btn v-else flat icon="star_outline"  color="primary" @click="star(currentDef['word'])" />
+            </q-card-actions>
+
+            <q-card-actions align="right">
+              <q-btn flat label="OK" color="primary" v-close-popup />
+            </q-card-actions>
+          
+          </div>
+
         </q-card>
       </q-dialog>
 
-
-
-
-      <div class="row">
+        <div class="row" v-if="$q.platform.is.mobile">
+          <q-card style="width: 100vw"
+            >
+            <div class="q-pa-md" >
+              <div class="q-gutter-sm">
+                <q-btn 
+                  v-for="h in hanzi" :key="h.word"
+                  style="width: 29vw; height: 29vw"
+                  @click="showDef(h)"
+                > 
+                <svg viewBox="0 0 56 18" style="width: 100%; height: 100%">
+                  <text x="50%" y="50%" font-size="4em" textLength="100%" dominant-baseline="middle" text-anchor="middle" font-family="Noto Sans SC, sans-serif">
+                    {{h['word']}}
+                  </text>    
+                  <text x="0" y="15"></text>
+                </svg>
+                </q-btn>
+              </div>
+            </div>
+          </q-card>
+        </div>
+      <div class="row" v-if="$q.platform.is.desktop">
           <q-btn 
             icon="keyboard_arrow_left"
             style="width: 15vw" 
@@ -43,14 +77,6 @@
           <q-card style="width: 70vw"
             >
             <div class="q-pa-md" >
-                <!--q-table
-                  title="Treats"
-                  :data="data"
-                  :columns="columns"
-                  row-key="name"
-                  dark
-                  color="amber"
-                /-->
               <div class="q-gutter-sm">
                 <q-btn 
                   v-for="h in hanzi" :key="h.word"
@@ -58,7 +84,9 @@
                   @click="showDef(h)"
                 > 
                 <svg viewBox="0 0 56 18" style="width: 100%; height: 100%">
-                  <text x="50%" y="50%" textLength="100%" dominant-baseline="middle" text-anchor="middle">{{h['word']}}</text>    
+                  <text x="50%" y="50%" font-size="3em" textLength="100%" dominant-baseline="middle" text-anchor="middle" font-family="Noto Sans SC, sans-serif">
+                    {{h['word']}}
+                  </text>    
                   <text x="0" y="15"></text>
                 </svg>
                 </q-btn>
@@ -71,6 +99,7 @@
             v-on:click="next"/>
       </div>
 
+
       <q-linear-progress size="50px" :value="page * 15 / 5000" color="accent" class="q-mt-sm">
         <div class="absolute-full flex flex-center">
           <q-badge color="white" text-color="accent" :label="page * 15 + '/5000'" />
@@ -82,6 +111,10 @@
 
 <script>
 import   hanzidb  from 'assets/hanzidb/hanzidb-translated.json'
+import Vue from 'vue'
+import Vue2TouchEvents from 'vue2-touch-events'
+ 
+Vue.use(Vue2TouchEvents)
 
 export default {
   name: 'HanziScroll',
@@ -114,6 +147,13 @@ export default {
       this.showingDef = true
     },
     
+    starred(c) { 
+
+    },
+
+    star() { 
+
+    },
 
     prev() {
       console.log("prev " + this.page )
