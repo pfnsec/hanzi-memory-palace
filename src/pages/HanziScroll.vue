@@ -1,6 +1,7 @@
 
 <template>
-    <q-page flex
+    <q-page 
+      class="col full-height" 
       @keydown.left="prev"
       @keydown.right="next"
       v-touch:swipe.right="prev"
@@ -34,9 +35,10 @@
           <div class="row no-wrap justify-between" style="padding: 5%">
 
             <q-card-actions align="left">
-              <q-btn v-if="starred(currentDef['word'])" flat icon="star"  color="primary" @click="unstar(currentDef['word'])" />
+              <q-btn v-if="starred[currentDef['word']]" flat icon="star"  color="primary" @click="unstar(currentDef['word'])" />
 
               <q-btn v-else flat icon="star_outline"  color="primary" @click="star(currentDef['word'])" />
+              {{starred}}
             </q-card-actions>
 
             <q-card-actions align="right">
@@ -61,7 +63,7 @@
                 <svg viewBox="0 0 56 18" style="width: 100%; height: 100%">
                   <text x="50%" y="50%" font-size="4em" textLength="100%" dominant-baseline="middle" text-anchor="middle" font-family="Noto Sans SC, sans-serif">
                     {{h['word']}}
-                  </text>    
+                  </text> 
                   <text x="0" y="15"></text>
                 </svg>
                 </q-btn>
@@ -69,38 +71,45 @@
             </div>
           </q-card>
         </div>
-      <div class="row" v-if="$q.platform.is.desktop">
+
+      <div class="row full-height" v-if="$q.platform.is.desktop">
           <q-btn 
+            class="col-0.5"
             icon="keyboard_arrow_left"
-            style="width: 15vw" 
             v-on:click="prev"/>
-          <q-card style="width: 70vw"
-            >
-            <div class="q-pa-md" >
-              <div class="q-gutter-sm">
+
+          <q-card style="" flat class="col" >
+            <div class="col">
+              <div class="row" v-for="i in [0, 5, 10]" :key="i">
                 <q-btn 
-                  v-for="h in hanzi" :key="h.word"
-                  style="width: 13vw; height: 13vw"
-                  @click="showDef(h)"
+                  class="col"
+                  v-for="j in Array.from(new Array(5), (x, i) => i)" :key="i + j"
+                  @click="showDef(hanzi[i + j])"
+                  style="height: 27vh"
                 > 
-                <svg viewBox="0 0 56 18" style="width: 100%; height: 100%">
-                  <text x="50%" y="50%" font-size="3em" textLength="100%" dominant-baseline="middle" text-anchor="middle" font-family="Noto Sans SC, sans-serif">
-                    {{h['word']}}
-                  </text>    
-                  <text x="0" y="15"></text>
-                </svg>
+                  <svg viewBox="0 0 80 18" style="width: 100%; height: 100%">
+                  <!--svg style="width: 100%; height: 100%"-->
+                    <text x="50%" y="50%" font-size="3em" textLength="100%" dominant-baseline="middle" text-anchor="middle" font-family="Noto Sans SC, sans-serif">
+                      {{hanzi[i+j]['word']}}
+                    </text>    
+                  </svg>
                 </q-btn>
               </div>
             </div>
           </q-card>
           <q-btn 
+            class="col-0.5"
             icon="keyboard_arrow_right"
-            style="width: 15vw" 
             v-on:click="next"/>
       </div>
 
+      <q-linear-progress 
+        size="50px" 
+        :value="page * 15 / 5000" 
+        color="accent" 
+        class="row"
 
-      <q-linear-progress size="50px" :value="page * 15 / 5000" color="accent" class="q-mt-sm">
+      >
         <div class="absolute-full flex flex-center">
           <q-badge color="white" text-color="accent" :label="page * 15 + '/5000'" />
         </div>
@@ -110,6 +119,8 @@
 </template>
 
 <script>
+import * as firebase from 'firebase';
+
 import   hanzidb  from 'assets/hanzidb/hanzidb-translated.json'
 import Vue from 'vue'
 import Vue2TouchEvents from 'vue2-touch-events'
@@ -129,14 +140,23 @@ export default {
   //}
 
     return {
-      page : 0,
-      hanzi: this.hanziPage(0),
       showingDef: false,
-      currentDef: {}
+      currentDef: {},
+      showingPageSelect: false,
     }
   },
 
   computed: {
+    starred() { 
+      return this.$store.getters['user/starred']
+    },
+    page() {
+      return this.$store.getters['user/page'] 
+    },
+    hanzi() {
+      console.log("hanzi")
+      return this.hanziPage(this.page)
+    }
   },
 
   methods: {
@@ -146,25 +166,33 @@ export default {
       //this.currentDef['pron'] = this.currentDef['pron'][0]
       this.showingDef = true
     },
-    
-    starred(c) { 
 
+    star(c) { 
+      var ins = {starred: {}}
+      ins.starred[String(c)] = true
+      this.$store.dispatch('user/patch', ins)
     },
 
-    star() { 
-
+    unstar(c) { 
+      var ins = {starred: {}}
+      ins.starred[String(c)] = false
+      this.$store.dispatch('user/patch', ins)
     },
 
     prev() {
-      console.log("prev " + this.page )
-      this.page--
-      this.hanzi = this.hanziPage(this.page)
+      if(this.page == 0)
+        return
+
+      var ins = {page: this.page - 1}
+      this.$store.dispatch('user/patch', ins)
     },
 
     next() {
       console.log("next " + this.page)
-      this.page++
-      this.hanzi = this.hanziPage(this.page)
+      //this.page++
+
+      var ins = {page: this.page + 1}
+      this.$store.dispatch('user/patch', ins)
     },
 
     hanziPage(n) {
