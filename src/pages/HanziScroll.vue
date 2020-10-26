@@ -8,6 +8,20 @@
       v-touch:swipe.left="next"
     >
 
+      <q-dialog v-model="showingPageSelect" style='min-width: 33%'
+        @keydown.left="prev"
+        @keydown.right="next"
+        v-touch:swipe.right="prev"
+        v-touch:swipe.left="next"
+      >
+        <q-card style="width: 55vw">
+          <q-card-section>
+            Select Page
+          </q-card-section>
+
+        </q-card>
+      </q-dialog>
+
       <q-dialog v-model="showingDef" style='min-width: 33%'
         @keydown.left="prev"
         @keydown.right="next"
@@ -38,7 +52,6 @@
               <q-btn v-if="starred[currentDef['word']]" flat icon="star"  color="primary" @click="unstar(currentDef['word'])" />
 
               <q-btn v-else flat icon="star_outline"  color="primary" @click="star(currentDef['word'])" />
-              {{starred}}
             </q-card-actions>
 
             <q-card-actions align="right">
@@ -61,7 +74,15 @@
                   @click="showDef(h)"
                 > 
                 <svg viewBox="0 0 56 18" style="width: 100%; height: 100%">
-                  <text x="50%" y="50%" font-size="4em" textLength="100%" dominant-baseline="middle" text-anchor="middle" font-family="Noto Sans SC, sans-serif">
+                  <text 
+                    x="50%" y="50%" font-size="4em" 
+                    textLength="100%" 
+                    dominant-baseline="middle" 
+                    text-anchor="middle" 
+                    font-family="Noto Sans SC, sans-serif"
+                    :fill="$q.dark ? '#FFF' : '#000'"
+
+                  >
                     {{h['word']}}
                   </text> 
                   <text x="0" y="15"></text>
@@ -89,7 +110,13 @@
                 > 
                   <svg viewBox="0 0 80 18" style="width: 100%; height: 100%">
                   <!--svg style="width: 100%; height: 100%"-->
-                    <text x="50%" y="50%" font-size="3em" textLength="100%" dominant-baseline="middle" text-anchor="middle" font-family="Noto Sans SC, sans-serif">
+                    <text 
+                      x="50%" y="50%" font-size="3em" 
+                      textLength="100%" 
+                      dominant-baseline="middle" 
+                      text-anchor="middle" 
+                      font-family="Noto Sans SC, sans-serif"
+                    >
                       {{hanzi[i+j]['word']}}
                     </text>    
                   </svg>
@@ -108,6 +135,7 @@
         :value="page * 15 / 5000" 
         color="accent" 
         class="row"
+        @click="showingPageSelect = true"
 
       >
         <div class="absolute-full flex flex-center">
@@ -213,3 +241,15 @@ export default {
 }
 </script>
 
+<style >
+
+body.body--dark {
+  fill: #cccccc;
+
+}
+
+body.body--light {
+  fill: rgb(0, 0, 0);
+
+}
+</style>

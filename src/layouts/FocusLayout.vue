@@ -24,17 +24,24 @@
       v-model="leftDrawerOpen"
       show-if-above
       bordered
-      content-class="bg-grey-1"
     >
       <q-list>
         <q-item-label
           header
-          class="text-grey-8"
         >
           Hanzi Palace
         </q-item-label>
 
         <login-button/>
+
+        <q-item>
+          <q-toggle
+            :icon="'moon'"
+            v-model="dark"
+            @input="toggleDark"
+            label="Dark Mode"
+          />
+        </q-item>
 
         <EssentialLink
           icon="star"
@@ -55,9 +62,6 @@
   background-color:royalblue
 }
 
-.q-page-container {
-  background-color:grey
-}
 </style>
 
 <script>
@@ -72,8 +76,21 @@ export default {
     EssentialLink
   },
 
+  mounted() {
+    this.$q.dark.set(this.dark)
+  },
+
+
+  methods: {
+    toggleDark(value) {
+      localStorage.setItem('dark', value)
+      this.$q.dark.set(value)
+    }
+  },
+
   data () {
     return {
+      dark: localStorage.getItem('dark'),
       leftDrawerOpen: false,
     }
   }
