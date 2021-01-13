@@ -22,7 +22,7 @@
         </q-card>
       </q-dialog>
 
-      <q-dialog v-model="showingDef" style='min-width: 33%'
+  <q-dialog v-model="showingDef" seamless style='min-width: 33%'
         @keydown.left="prev"
         @keydown.right="next"
       >
@@ -63,16 +63,20 @@
         </q-card>
       </q-dialog>
 
-        <div class="row" v-if="$q.platform.is.mobile">
-          <q-card style="width: 100vw"
-            >
-            <div class="q-pa-md" >
-              <div class="q-gutter-sm">
-                <q-btn 
-                  v-for="h in hanzi" :key="h.word"
-                  style="width: 29vw; height: 29vw"
-                  @click="showDef(h)"
-                > 
+      <div class="row" v-if="$q.platform.is.mobile">
+        <q-card style="width: 100vw"
+          >
+          <div class="q-pa-md" >
+            <div class="q-gutter-sm">
+              <button 
+                v-for="h in hanzi" :key="h.word"
+                style="width: 29vw; height: 29vw"
+                @mousedown="showDef(h)"
+                @mouseup="hideDef()" 
+                @touchstart="showDef(h)" 
+                @touchend="hideDef()" 
+                @touchcancel="hideDef()"
+              > 
                 <svg viewBox="0 0 56 18" style="width: 100%; height: 100%">
                   <text 
                     x="50%" y="50%" font-size="4em" 
@@ -80,18 +84,16 @@
                     dominant-baseline="middle" 
                     text-anchor="middle" 
                     font-family="Noto Sans SC, sans-serif"
-                    :fill="$q.dark ? '#FFF' : '#000'"
-
                   >
                     {{h['word']}}
                   </text> 
                   <text x="0" y="15"></text>
                 </svg>
-                </q-btn>
-              </div>
+              </button>
             </div>
-          </q-card>
-        </div>
+          </div>
+        </q-card>
+      </div>
 
       <div class="row full-height" v-if="$q.platform.is.desktop">
           <q-btn 
@@ -159,14 +161,6 @@ export default {
   name: 'HanziScroll',
 
   data() {
-    //while(arr.length) newArr.uupush(arr.splice(0,3));
-
-  //console.log(hanzidb.length)
-  //console.log(hanzidb.keys())
-  //for (var h in hanzidb) {
-  //  console.log(hanzidb[h])
-  //}
-
     return {
       showingDef: false,
       currentDef: {},
@@ -182,7 +176,6 @@ export default {
       return this.$store.getters['user/page'] 
     },
     hanzi() {
-      console.log("hanzi")
       return this.hanziPage(this.page)
     }
   },
@@ -193,6 +186,10 @@ export default {
       this.currentDef = h
       //this.currentDef['pron'] = this.currentDef['pron'][0]
       this.showingDef = true
+    },
+
+    hideDef() {
+      this.showingDef = false
     },
 
     star(c) { 
