@@ -6,7 +6,9 @@ const routes = [
     //component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/HanziScroll.vue') },
-      { path: 'hanzi', component: () => import('pages/HanziScroll.vue') }
+      { path: 'hanzi', component: () => import('pages/HanziScroll.vue') },
+      { path: 'favourites', component: () => import('pages/Starred.vue') },
+      { path: 'lookup', component: () => import('pages/Lookup.vue') },
     ]
   }
 ]

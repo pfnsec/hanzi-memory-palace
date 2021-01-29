@@ -43,10 +43,35 @@
           />
         </q-item>
 
-        <EssentialLink
-          icon="star"
-          title="Favourites"
-        />
+        <q-item
+          clickable v-ripple @click="$router.push('/favourites')"
+        >
+          <q-item-section side>
+            <q-avatar rounded size="48px">
+              <q-icon name="star" />
+            </q-avatar>
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>Favourites</q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-item
+          icon="edit"
+          title="Lookup"
+          clickable v-ripple @click="$router.push('/lookup')"
+        >
+          <q-item-section side>
+            <q-avatar rounded size="48px">
+              <q-icon name="edit" />
+            </q-avatar>
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>Lookup (beta)</q-item-label>
+          </q-item-section>
+        </q-item>
 
       </q-list>
     </q-drawer>
@@ -89,8 +114,11 @@ export default {
   },
 
   data () {
+    var dark = localStorage.getItem('dark')
+    this.$q.dark.set(dark)
+
     return {
-      dark: localStorage.getItem('dark'),
+      dark: dark,
       leftDrawerOpen: false,
     }
   }
