@@ -15,6 +15,24 @@
       <q-item-label> Sign In </q-item-label>
     </q-item-section>
   </q-item>
+
+  <q-item
+    v-else
+    clickable
+    target="_blank"
+  >
+    <q-item-section
+      avatar
+    >
+      <q-avatar>
+        <img :src="currentUser.photoURL">
+      </q-avatar>
+    </q-item-section>
+
+    <q-item-section>
+      <q-item-label> {{currentUser["displayName"]}} </q-item-label>
+    </q-item-section>
+  </q-item>
 </template>
 
 <script>
