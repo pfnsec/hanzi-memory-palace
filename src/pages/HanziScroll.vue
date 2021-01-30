@@ -22,7 +22,7 @@
         </q-card>
       </q-dialog>
 
-  <q-dialog v-model="showingDef" seamless style='min-width: 33%'
+      <q-dialog v-model="showingDef" style='min-width: 33%'
         @keydown.left="prev"
         @keydown.right="next"
       >
@@ -68,7 +68,7 @@
           >
           <div class="q-pa-md" >
             <div class="q-gutter-sm">
-              <button 
+              <q-btn 
                 v-for="h in hanzi" :key="h.word"
                 style="width: 29vw; height: 29vw"
                 @mousedown="showDef(h)"
@@ -89,7 +89,7 @@
                   </text> 
                   <text x="0" y="15"></text>
                 </svg>
-              </button>
+              </q-btn> 
             </div>
           </div>
         </q-card>
@@ -159,6 +159,8 @@ Vue.use(Vue2TouchEvents)
 
 export default {
   name: 'HanziScroll',
+
+  props: [],
 
   data() {
     return {
