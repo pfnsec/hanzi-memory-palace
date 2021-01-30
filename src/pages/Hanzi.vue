@@ -1,5 +1,5 @@
 <template>
-    <scroll bank="starred"/>
+    <scroll bank="frequency"/>
 </template>
 
 <script>
