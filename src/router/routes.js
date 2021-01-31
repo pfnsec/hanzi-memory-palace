@@ -5,8 +5,8 @@ const routes = [
     component: () => import('layouts/FocusLayout.vue'),
     //component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/HanziScroll.vue') },
-      { path: 'hanzi', component: () => import('pages/Hanzi.vue') },
+      //{ path: '', component: () => import('pages/HanziScroll.vue') },
+      { path: '', component: () => import('pages/Hanzi.vue') },
       { path: 'favourites', component: () => import('pages/Starred.vue') },
       { path: 'lookup', component: () => import('pages/Lookup.vue') },
     ]

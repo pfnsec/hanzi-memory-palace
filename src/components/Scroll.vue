@@ -21,7 +21,7 @@
         </q-card>
       </q-dialog>
 
-      <q-dialog v-model="showingDef" seamless style='min-width: 33%'
+      <q-dialog v-model="showingDef" style='min-width: 33%'
         @keydown.left="prev"
         @keydown.right="next"
       >
@@ -50,7 +50,7 @@
             <q-card-actions align="left">
               <q-btn v-if="starred[currentDef['word']]" flat icon="star"  color="primary" @click="unstar(currentDef['word'])" />
 
-              <q-btn v-else flat icon="star_outline"  color="primary" @click="star(currentDef['word'])" />
+              <q-btn v-else flat icon="star_outline"  color="primary" @click="star(currentDef['word'], currentDef)" />
             </q-card-actions>
 
             <q-card-actions align="right">
@@ -167,8 +167,16 @@ export default {
   },
 
   data() {
+    var page = localStorage.getItem('page')
+
+    if(page){
+      page = parseInt(page)
+    } else {
+      page = 0
+    }
+
     return {
-      currentPage: 0,
+      page: page,
       showingDef: false,
       currentDef: {},
       showingPageSelect: false,
@@ -178,9 +186,7 @@ export default {
   computed: {
     starred() { 
       return this.$store.getters['user/starred']
-    },
-    page() {
-      return this.$store.getters['user/page'] 
+
     },
     hanzi() {
       return this.hanziPage(this.page)
@@ -214,17 +220,24 @@ export default {
     prev() {
       if(this.page == 0)
         return
+      else
+        this.page--
+      
+      localStorage.setItem("page", this.page)
 
-      var ins = {page: this.page - 1}
-      this.$store.dispatch('user/patch', ins)
+      //var ins = {page: this.page - 1}
+      //this.$store.dispatch('user/patch', ins)
     },
 
     next() {
-      console.log("next " + this.page)
+      //console.log("next " + this.page)
       //this.page++
+      this.page++
+      
+      localStorage.setItem("page", this.page)
 
-      var ins = {page: this.page + 1}
-      this.$store.dispatch('user/patch', ins)
+      //var ins = {page: this.page + 1}
+      //this.$store.dispatch('user/patch', ins)
     },
 
     hanziPage(n) {
