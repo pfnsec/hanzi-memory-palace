@@ -40,13 +40,18 @@ import * as firebase from 'firebase'
 
 export default {
   name: 'LoginButton',
-  computed: {
-
-      currentUser() {
-        return firebase.auth().currentUser
-      }
-
+  data() {
+    return {
+    }
   },
+
+  computed: {
+      currentUser() {
+        //return firebase.auth().currentUser
+        return this.$store.state.user.userData
+      }
+  },
+
   methods: {
       login() {
         var provider = new firebase.auth.GoogleAuthProvider();
@@ -55,13 +60,7 @@ export default {
             firebase.auth().signInWithPopup(provider).then(function(result) {
                 var token = result.credential.accessToken;
                 var user = result.user;
-                //console.log(user)
-            }).catch(function(error) {
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                var email = error.email;
-                var credential = error.credential;
-            });
+            })
         });
 
       }

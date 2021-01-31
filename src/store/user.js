@@ -1,32 +1,40 @@
 
 const user = {
-    firestorePath: 'users/{userId}',
-    firestoreRefType: 'doc', // or 'doc'
-    moduleName: 'user',
-    statePropName: 'data',
+    //firestorePath: 'users/{userId}',
+    //firestoreRefType: 'doc', // or 'doc'
+    //moduleName: 'user',
+    //statePropName: 'data',
     namespaced: true, // automatically added
+    /*
+    sync: {
+        fill: ["starred"],
+        guard: ["userData"],
+    },
+    */
   
     state: {
-        data: {
-            starred: {},
-            page: 0
-        },
+        starred: {},
+        page: 0,
         userData: null
     },
     getters: {
         starred: state => {
-            return state.data.starred
+            return state.starred
         },
         page: state => {
-            return state.data.page
+            return state.page
         },
         userData: state => {
-            return state.data.userData
-        }
+            return state.userData
+        },
     },
     mutations: {
         setUserData(state, userData) {
-            state.userData = userData
+            state.userData = {
+                photoURL: userData.photoURL,
+                displayName: userData.displayName,
+                uid: userData.uid,
+            }
         }
     },
     actions: {},

@@ -1,17 +1,20 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import VuexEasyFirestore from 'vuex-easy-firestore'
+//import VuexEasyFirestore from 'vuex-easy-firestore'
 import * as firebase from 'firebase'
 
 // import example from './module-example'
 
 import user from './user'
+import auth from './auth'
 
 
+/*
 const easyFirestore = VuexEasyFirestore(
   [user],
   {logging: true, FirebaseDependency: firebase}
 )
+*/
 
 Vue.use(Vuex)
 
@@ -26,8 +29,11 @@ Vue.use(Vuex)
 
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
-    plugins: [easyFirestore],
+    //plugins: [easyFirestore],
+    modules: {
+      user
 
+    },
 
     // enable strict mode (adds overhead!)
     // for dev mode only
