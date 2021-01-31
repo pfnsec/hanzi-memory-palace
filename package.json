@@ -14,8 +14,8 @@
     "@quasar/extras": "^1.0.0",
     "firebase": "^7.24.0",
     "quasar": "^1.0.0",
-    "vue2-touch-events": "^2.2.1",
-    "vuex-easy-firestore": "^1.35.17"
+    "vue-firestore": "^0.3.30",
+    "vue2-touch-events": "^2.2.1"
   },
   "devDependencies": {
     "@quasar/app": "^1.0.0"
