@@ -38,6 +38,8 @@
           <q-toggle
             :icon="'moon'"
             v-model="dark"
+            true-value="true"
+            false-value="false"
             @input="toggleDark"
             label="Dark Mode"
           />
@@ -102,20 +104,28 @@ export default {
   },
 
   mounted() {
-    this.$q.dark.set(this.dark)
+    //this.$q.dark.set(this.dark)
   },
 
 
   methods: {
     toggleDark(value) {
       localStorage.setItem('dark', value)
-      this.$q.dark.set(value)
+      if(value == "true"){
+        this.$q.dark.set(true)
+      } else {
+        this.$q.dark.set(false)
+      }
     }
   },
 
   data () {
     var dark = localStorage.getItem('dark')
-    this.$q.dark.set(dark)
+    if(dark == "true"){
+      this.$q.dark.set(true)
+    } else {
+      this.$q.dark.set(false)
+    }
 
     return {
       dark: dark,
